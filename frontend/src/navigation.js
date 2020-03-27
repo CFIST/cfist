@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Home from "./home/home";
 import About from "./about/about";
+import School from "./school/school";
 
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline, MDBDropdown,
     MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
@@ -19,7 +20,7 @@ import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNav
       render() {
         return (
           <Router>
-              <MDBNavbar color="stylish-color" expand="md">
+              <MDBNavbar style={{position:"fixed", width:"100%"}} color="stylish-color" expand="md">
               <MDBNavLink style={{color:"white"}} to='/'>CFIST</MDBNavLink>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
@@ -45,6 +46,7 @@ import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNav
             <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/about" exact component={About} />
+              <Route path="/school" exact component={School}/>
             </Switch>
           </Router>
         );
