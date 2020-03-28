@@ -1,18 +1,21 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch,Redirect } from "react-router-dom";
 import Home from "./home/home";
-import About from "./about/about";
 import School from "./school/school";
-
+import Login from "./login/login";
 import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBFormInline, MDBDropdown,
-    MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem } from "mdbreact";
+    MDBDropdownToggle, MDBDropdownMenu, MDBDropdownItem, MDBBtn } from "mdbreact";
+import Signup from "./signup/signup";
 
 
     class Navigation extends Component {
-        state = {
+      constructor(props) {
+        super(props);
+        this.state = {
             isOpen: false
+
         };
-    
+      }
         toggleCollapse = () => {
             this.setState({ isOpen: !this.state.isOpen });
         }
@@ -21,35 +24,34 @@ import { MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNav
         return (
           <Router>
               <MDBNavbar style={{position:"fixed", width:"100%"}} color="stylish-color" expand="md">
-              <MDBNavLink style={{color:"white"}} to='/'>CFIST</MDBNavLink>
+              <MDBNavLink style={{color:"white"}} to='/home'>CFIST</MDBNavLink>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
                     <MDBNavbarNav right>
                         <MDBNavItem>
-                        <MDBNavLink style={{color:"white"}} to="/">Home</MDBNavLink>
-                        </MDBNavItem>
-                        <MDBNavItem>
-                        <MDBNavLink style={{color:"white"}} to='/about'>About</MDBNavLink>
+                        <MDBNavLink style={{color:"white"}} to="/home">Home</MDBNavLink>
                         </MDBNavItem>
                     </MDBNavbarNav>
                     <MDBNavbarNav right>
                         <MDBNavItem>
-                        <MDBFormInline waves>
-                            <div className="md-form my-0" style={{color:"white"}}>
-                            <input className="form-control mr-sm-2" style={{color:"white"}} type="text" placeholder="Search" aria-label="Search" />
-                            </div>
-                        </MDBFormInline>
+                          <a href="/"> <button className="btn btn-light">Login</button></a>
                         </MDBNavItem>
                     </MDBNavbarNav>
                     </MDBCollapse>
                 </MDBNavbar>
-            <Switch>
-              <Route path="/" exact component={Home} />
-              <Route path="/about" exact component={About} />
+            <Switch >
+              <Route path="/" exact component={Login} />
+              <Route path="/signup" exact component={Signup}/>
+              <Route path="/home" exact component={Home}/>
               <Route path="/school" exact component={School}/>
             </Switch>
           </Router>
         );
+      }
+
+      logIn = _=>{
+        console.log("login");
+        return <Redirect to={{ pathname: '/home'}}/>
       }
     }
     export default Navigation;

@@ -1,0 +1,12 @@
+@media (min-width: 768px) {
+  .bd-placeholder-img-lg {
+    font-size: 3.5rem;
+  }
+}
+
+.logo {
+  position: fixed; /* or absolute */
+  top: 10%;
+  left: 40%;
+}
+

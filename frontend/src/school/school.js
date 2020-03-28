@@ -47,6 +47,12 @@ class School extends Component {
                     * SJSU offers 145 bachelor's and master's degrees with 108 concentrations and five credential programs with 19 concentrations. <br/>
                     * The university also offers four doctoral degrees as of fall 2019. SJSU is accredited by the Western Association of Schools and Colleges (WASC).<br/>
                     * SJSU's total enrollment was 33,282 in fall 2019, including over 5,400 graduate and credential students.<br/>
+
+                    * San José State University (San Jose State or SJSU) is a public university in San Jose, California.<br/>
+                    * SJSU is the oldest public university on the West Coast and the founding campus of the California State University (CSU) system.<br/>
+                    * SJSU offers 145 bachelor's and master's degrees with 108 concentrations and five credential programs with 19 concentrations. <br/>
+                    * The university also offers four doctoral degrees as of fall 2019. SJSU is accredited by the Western Association of Schools and Colleges (WASC).<br/>
+                    * SJSU's total enrollment was 33,282 in fall 2019, including over 5,400 graduate and credential students.<br/>
                     </p>
               </ul>
             </nav>

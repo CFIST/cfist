@@ -48,6 +48,7 @@
   
   #search {
     position: relative;
+    margin-top: "74px";
   }
   
   .navbar-btn {
@@ -74,17 +75,19 @@
   
   #sidebar {
     width: 30%;
-    position: fixed !important;
-    top: 57px;
+    position: fixed;
+    top:74px;
     left: 0;
     height: 100vh;
     overflow-y: scroll;
     max-height: 100vh;
-    z-index: 999;
+    z-index: 0;
     background: #7386d5;
     color: #fff;
     transition: all 0.3s;
+    padding-bottom: 74px;
   }
+
   ::-webkit-scrollbar {
     width: 0 !important;
   }
@@ -180,13 +183,15 @@
   ----------------------------------------------------- */
   
   #content {
-      width: calc(100% - 250px);
-      padding-left: 30%;
-      min-height: 100vh;
+      width: calc(100% - 30%);
+      max-height: 100vh;
       transition: all 0.3s;
-      position: absolute;
-      top: 57px;
-      right: 0;
+      position: fixed;
+      top: 74px;
+      left:30%;
+      z-index: 0;
+      overflow-y: scroll;
+      padding-bottom: 80px;
   }
   
   #content.active {

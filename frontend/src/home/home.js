@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import './home.css';
 import { Redirect , Link} from "react-router-dom";
 import Navigation from '../navigation';
-import Button from 'mdbreact';
 
 class Home extends Component {
     constructor(props) {
@@ -15,10 +14,18 @@ class Home extends Component {
     render(){
         return (
             <div>
-                <div> This is  home </div>
-                <a href="/about"> <button className="btn" color="stylish-color">About</button></a>
+                
+                <div id="top-margin"> 
+                <a onClick={this.addNewSchool}> <button className="btn" color="stylish-color">ADD NEW SCHOOL</button></a>
+                    This is home <br/> 
+                <a href="/school"> <button className="btn" color="stylish-color">SJSU</button></a>
+                </div>
             </div>
         );
+    }
+
+    addNewSchool = _=>{
+        console.log("add new school")
     }
 }
 
