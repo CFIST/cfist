@@ -30,13 +30,61 @@ class Home extends Component {
         gameplan:"",
         coach_name:"",
 
-        mostRecentCoach_id:""
+        mostRecentCoach_id:"",
+
+        cardData:[]
+    }
+
+    async componentWillMount(){
+      await this.getMostRecentCoachID();
+      console.log(this.state.mostRecentCoach_id);
+      await this.getSchools();
+    }
+
+    getSchools = async _=>{
+      await fetch(`http://localhost:4000/getSchools`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({ cardData: res.data });
+      })
+      .catch(err => console.error(err));
+      console.log(this.state.cardData);
+    }
+
+    getMostRecentCoachID = async _=>{
+      await fetch(`http://localhost:4000/getcoachid`)
+       .then(res => res.json())
+       .then(res => {
+        this.setState({ mostRecentCoach_id: res.data[0].coach_id });
+      })
+      .catch(err => console.error(err));
+
+      console.log(this.state.mostRecentCoach_id);
+      if(this.state.mostRecentCoach_id === undefined || this.state.mostRecentCoach_id === null || this.state.mostRecentCoach_id === ''){
+        await this.setState({mostRecentCoach_id:0});
+      }
+      
+      console.log(this.state.mostRecentCoach_id);
+    }
+
+    renderSchoolCard = (tuition,state,zip_code,name,city,school_logo)=>{
+      return(
+          <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+          <div class="flipper">
+            <div class="front">
+              <img class="flip-container"src={school_logo} alt={name}/>
+            </div>
+            <div class="back">
+            <a href="/school"> <button className="btn" color="stylish-color">SJSU</button></a>
+            </div>
+          </div>
+        </div>
+        );
     }
 
     render(){
         return (
             <div>
-                
                 <div id="top-margin"> 
                 <PopupState  variant="popover" popupId="demo-popup-popover">
               {popupState => (
@@ -103,31 +151,57 @@ class Home extends Component {
                 </div>
               )}
             </PopupState>
+            {this.state.cardData.map(p => this.renderSchoolCard(p.tuition,p.state,p.zip_code,p.name,p.city,p.school_logo))}
+
                     This is home <br/> 
-                <a href="/school"> <button className="btn" color="stylish-color">SJSU</button></a>
                 </div>
             </div>
         );
     }
 
-    addNewSchool = _=>{
-        console.log(this.state.school_name);
-        console.log(this.state.zip_code);
-        console.log(this.state.city);
-        console.log(this.state.state);
-        console.log(this.state.tuition);
-        console.log(this.state.school_logo);
-        console.log(this.state.teamname);
-        console.log(this.state.conference);
-        console.log(this.state.mascot);
-        console.log(this.state.conference);
-        console.log(this.state.nationalChampionships);
-        console.log(this.state.heismanTropies);
-        console.log(this.state.team_logo);
-        console.log(this.state.coach_id);
-        console.log(this.state.experience);
-        console.log(this.state.gameplan);
-        console.log(this.state.coach_name);
+    addNewSchool = async _=>{
+      await this.setState({coach_id: this.state.mostRecentCoach_id+1});
+      console.log(this.state.school_name);
+      console.log(this.state.zip_code);
+      console.log(this.state.city);
+      console.log(this.state.state);
+      console.log(this.state.tuition);
+      console.log(this.state.school_logo);
+      console.log(this.state.teamname);
+      console.log(this.state.conference);
+      console.log(this.state.mascot);
+      console.log(this.state.conference);
+      console.log(this.state.nationalChampionships);
+      console.log(this.state.heismanTropies);
+      console.log(this.state.team_logo);
+      console.log(this.state.coach_id);
+      console.log(this.state.experience);
+      console.log(this.state.gameplan);
+      console.log(this.state.coach_name);
+      await this.getMostRecentCoachID();
+      console.log(this.state.mostRecentCoach_id);
+
+      await fetch(`http://localhost:4000/addSchool?tuition=${this.state.tuition}&state=${this.state.state}&zip_code=${this.state.zip_code}&name=${this.state.school_name}&city=${this.state.city}&school_logo=${this.state.school_logo}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/addFootballProgram?school_zip_code=${this.state.zip_code}&school_name=${this.state.school_name}&team_name=${this.state.teamname}&team_conference=${this.state.conference}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/addCollegeTeam?team_name=${this.state.teamname}&heisman_trophies=${this.state.heismanTropies}&conference=${this.state.conference}&mascot=${this.state.mascot}&national_championships=${this.state.nationalChampionships}&team_logo${this.state.team_logo}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+      
+      await fetch(`http://localhost:4000/addCoachedBy?coach_id=${this.state.coach_id}&team_name=${this.state.team_name}&conference=${this.state.conference}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/addCoach?gameplan=${this.state.gameplan}&coach_id=${this.state.coach_id}&experience=${this.state.experience}&coach_name=${this.state.coach_name}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await this.getSchools();
     }
 }
 
