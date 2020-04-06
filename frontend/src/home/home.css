@@ -47,3 +47,9 @@
     transform: rotateY(180deg);
     background-color: darkgrey;
 }
+
+
+.card-inline {
+	display: inline-block;
+	padding-top: 3%;
+  }

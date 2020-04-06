@@ -73,6 +73,25 @@ var db = mysql.createConnection({
     });
   });
 
+  app.get("/getSchoolData", (req, res) => {
+    const {school_name, zip_code}  = req.query;
+    db.query(`Select * FROM football_program JOIN school ON (school_zip_code = zip_code AND name = school_name) JOIN
+		    college_team ON(college_team.team_name = football_program.team_name AND football_program.team_conference = college_team.conference)
+        JOIN coached_by ON (coached_by.team_name = college_team.team_name AND coached_by.conference = college_team.conference)
+        JOIN coach ON (coach.coach_id = coached_by.coach_id)
+        WHERE school_name = '${school_name}' AND zip_code = ${zip_code};`, (err, results) => {
+      if (err) {
+        return res.send(err);
+      } 
+      else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+  
+
   app.get("/addUser", (req, res) => {
     console.log("added a user");
     const {username, password, email, administrator}  = req.query;
@@ -157,6 +176,8 @@ var db = mysql.createConnection({
       }
     });
   });
+
+
 
   app.get("/", (req, res) => {
     res.send("THIS IS THE HOME");
