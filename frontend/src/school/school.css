@@ -219,3 +219,66 @@
       display: none;
     }
   }
+
+
+  .flip-container {
+    perspective: 1000px;
+  }
+    /* flip the pane when hovered */
+    .flip-container:hover .flipper, .flip-container.hover .flipper {
+      transform: rotateY(180deg);
+    }
+  
+  .flip-container, .front, .back {
+    width: 250px;
+    height: 250px;
+  }
+  
+  /* flip speed goes here */
+  .flipper {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+  
+    position: relative;
+  }
+  
+  /* hide back of pane during swap */
+  .front, .back {
+    backface-visibility: hidden;
+  
+    position: absolute;
+    top: 0;
+      left: 0;
+  }
+  
+  /* front pane, placed above back */
+  .front {
+    z-index: 2;
+    /* for firefox 31 */
+      transform: rotateY(0deg);
+      height: 10px;
+      width: 10px;
+  }
+  
+  /* back, initially hidden pane */
+  .back {
+      transform: rotateY(180deg);
+      background-color: darkgrey;
+  }
+  
+  .fill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden
+}
+.fill img {
+    flex-shrink: 0;
+    min-width: 100%;
+    min-height: 100%
+}
+
+  .card-inline {
+    display: inline-block;
+    padding-top: 3%;
+    }

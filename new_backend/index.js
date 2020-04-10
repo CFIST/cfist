@@ -60,6 +60,19 @@ var db = mysql.createConnection({
       }
     });
   });
+
+  app.get("/getplayerid", (req, res) => {
+    db.query(`SELECT player_id  FROM players ORDER BY player_id DESC LIMIT 1`, (err, results) => {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
   app.get("/getSchools", (req, res) => {
     db.query(`SELECT * FROM school`, (err, results) => {
       if (err) {
@@ -91,6 +104,22 @@ var db = mysql.createConnection({
     });
   });
   
+  app.get("/getPlayerData", (req, res) => {
+    const {team_name, conference}  = req.query;
+    db.query(`  Select * FROM belongs_to JOIN
+		players ON(belongs_to.player_id = players.player_id)
+        WHERE belongs_to.team_name = '${team_name}'  AND belongs_to.conference = '${conference}';`, (err, results) => {
+      if (err) {
+        return res.send(err);
+      } 
+      else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
 
   app.get("/addUser", (req, res) => {
     console.log("added a user");
@@ -177,7 +206,33 @@ var db = mysql.createConnection({
     });
   });
 
+  app.get("/addBelongsTo", (req, res) => {
+    const {player_id, team_name, conference}  = req.query;
+    const INSERT_USER_QUERY = `INSERT INTO belongs_to (player_id, team_name, conference) VALUES( '${player_id}','${team_name}','${conference}')`;
+    db.query(INSERT_USER_QUERY, (err, results) => {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
 
+    app.get("/addPlayers", (req, res) => {
+      const {player_id, number, name,nfl_team, recruting_rank,player_image}  = req.query;
+      const INSERT_USER_QUERY = `INSERT INTO players (player_id, number, name,nfl_team,recruting_rank,player_image) VALUES( '${player_id}','${number}','${name}','${nfl_team}','${recruting_rank}','${player_image}')`;
+      db.query(INSERT_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
 
   app.get("/", (req, res) => {
     res.send("THIS IS THE HOME");

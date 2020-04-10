@@ -96,7 +96,6 @@ class Home extends Component {
         return (
             <div>
                 <div id="top-margin"> 
-                
                 <PopupState  variant="popover" popupId="demo-popup-popover">
               {popupState => (
                 <div>
@@ -190,8 +189,7 @@ class Home extends Component {
       console.log(this.state.experience);
       console.log(this.state.gameplan);
       console.log(this.state.coach_name);
-      await this.getMostRecentCoachID();
-      console.log(this.state.mostRecentCoach_id);
+
 
       await fetch(`http://localhost:4000/addSchool?tuition=${this.state.tuition}&state=${this.state.state}&zip_code=${this.state.zip_code}&name=${this.state.school_name}&city=${this.state.city}&school_logo=${this.state.school_logo}`)
       .then(res => res.json())
@@ -214,6 +212,8 @@ class Home extends Component {
       .catch(err => console.error(err));
 
       await this.getSchools();
+      await this.getMostRecentCoachID();
+      console.log(this.state.mostRecentCoach_id);
     }
 }
 
