@@ -61,6 +61,19 @@ var db = mysql.createConnection({
     });
   });
 
+  app.get("/getseasonid", (req, res) => {
+    //const { email } = req.query;
+    db.query(`SELECT season_id FROM season_records ORDER BY season_id DESC LIMIT 1`, (err, results) => {
+      if (err) {
+        return res.send(err);
+      } else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
   app.get("/getplayerid", (req, res) => {
     db.query(`SELECT player_id  FROM players ORDER BY player_id DESC LIMIT 1`, (err, results) => {
       if (err) {
@@ -227,6 +240,50 @@ var db = mysql.createConnection({
         if (err) {
           return res.send(err);
         } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
+
+
+    app.get("/addHasRecord", (req, res) => {
+      const {season_id, team_name, record_year}  = req.query;
+      const INSERT_USER_QUERY = `INSERT INTO has_record (season_id, team_name, record_year) VALUES( '${season_id}','${team_name}','${record_year}')`;
+      db.query(INSERT_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
+  
+    app.get("/addSeasonRecords", (req, res) => {
+      const {final_CFP_rank, total_wins, total_losses,conference_losses, conference_wins,season_id,champions}  = req.query;
+      const INSERT_USER_QUERY = `INSERT INTO season_records (final_CFP_rank, total_wins, total_losses,conference_losses, conference_wins,season_id,champions) VALUES( '${final_CFP_rank}','${total_wins}','${total_losses}','${conference_losses}','${conference_wins}','${season_id}','${champions}')`;
+      db.query(INSERT_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
+
+    app.get("/getSeasonData", (req, res) => {
+      const {team_name}  = req.query;
+      db.query(`SELECT * FROM has_record JOIN season_records ON(has_record.season_id = season_records.season_id)
+          WHERE team_name = '${team_name}';`, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } 
+        else {
           return res.json({
             data: results
           });

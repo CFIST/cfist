@@ -16,6 +16,8 @@ class School extends Component {
       schoolData:[],
       schoolName: this.props.location.schoolProps.schoolName,
       mostRecentPlayer_id:"",
+      mostRecentSeason_id:"",
+
       player_id:"",
       player_number:"",
       player_name:"",
@@ -23,7 +25,17 @@ class School extends Component {
       player_recruting_rank:"",
       player_image:"",
 
-      playerData:[]
+      season_id:"",
+      year:"",
+      final_cfr_rank:"",
+      total_wins:"",
+      total_losses:"",
+      conference_wins:"",
+      conference_losses:"",
+      champions:"",
+
+      playerData:[],
+      seasonData:[]
     }
    
 
@@ -31,6 +43,8 @@ class School extends Component {
       await this.getSchoolData();
       await this.getMostRecentPlayerID();
       await this.getPlayerData();
+      await this.getSeasonData();
+      await this.getMostRecentSeasonID();
       console.log(this.state.schoolName);
       console.log(this.state.schoolData);
       console.log("COMPONENT DID MOUNT");
@@ -52,6 +66,21 @@ class School extends Component {
       console.log(this.state.mostRecentPlayer_id);
     }
 
+    getMostRecentSeasonID = async _=>{
+      await fetch(`http://localhost:4000/getseasonid`)
+       .then(res => res.json())
+       .then(res => {
+        this.setState({ mostRecentSeason_id: res.data[0].season_id});
+      })
+      .catch(err => console.error(err));
+
+      console.log(this.state.mostRecentSeason_id);
+      if(this.state.mostRecentSeason_id === undefined || this.state.mostRecentSeason_id === null || this.state.mostRecentSeason_id === ''){
+        await this.setState({mostRecentSeason_id:0});
+      }
+      console.log(this.state.mostRecentSeason_id);
+    }
+
 
     getSchoolData =  async _=>{
       await fetch(`http://localhost:4000/getSchoolData?school_name=${this.props.location.schoolProps.schoolName}&zip_code=${this.props.location.schoolProps.zipcode}`)
@@ -62,7 +91,18 @@ class School extends Component {
       .catch(err => console.error(err));
       console.log(this.state.schoolData);
       console.log();
+    }
 
+    getSeasonData =  async _=>{
+      let team_name = await this.state.schoolData.map((p)=>p.team_name);
+      await fetch(`http://localhost:4000/getSeasonData?team_name=${team_name}`)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({ seasonData: res.data });
+      })
+      .catch(err => console.error(err));
+      console.log(this.state.seasonData);
+      console.log();
     }
 
     getPlayerData =  async _=>{
@@ -95,6 +135,19 @@ class School extends Component {
             </MDBCard>
           </MDBCol>
         </div>);
+    }
+
+    renderSeasons = (record_year,final_CFP_rank,total_wins,total_losses,conference_losses,conference_wins,champions)=>{
+      return (
+          <tr>
+            <th scope="row"> {record_year}</th>
+            <td>{final_CFP_rank}</td>
+            <td>{total_wins}</td>
+            <td>{total_losses}</td>
+            <td>{conference_wins}</td>
+            <td>{conference_losses}</td>
+            <td>{champions}</td>
+          </tr>);
     }
   
 
@@ -144,6 +197,66 @@ class School extends Component {
           {/* <!-- Page Content  --> */}
           <div id="content">
             <div className="card-inline" id="cards">
+
+
+            <PopupState  variant="popover" popupId="demo-popup-popover">
+              {popupState => (
+                <div>
+                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
+                    Add New Season
+                  </button>
+                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
+                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
+                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}} align="center">        
+                    <Box p={5}>
+                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Season </p>
+                    <p align="top" style={{color:"blue"}}> Year <br/>
+
+                    <input id="year_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({year: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Final CFP Rank<br/>
+                    <input id="final_CFP_rank_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({final_cfr_rank: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Total Wins<br/>
+                    <input id="total_wins_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({total_wins: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Total Losses<br/>
+                    <input id="total_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({total_losses: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Conference Wins<br/>
+                    <input id="conference_wins_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_wins: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Conference Losses<br/>
+                    <input id="conference_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_losses: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Champions<br/>
+                    <input id="chapions_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({champions: e.target.value})}/>
+                    </p>
+                    <button className="btn btn-success"  color="primary" onClick={this.addNewSeason}>ADD</button>
+                    </Box>
+                    </div>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Year</th>
+                    <th scope="col">CFP Rank</th>
+                    <th scope="col">Wins</th>
+                    <th scope="col">Losses</th>
+                    <th scope="col">Conference Wins</th>
+                    <th scope="col">Conference Losses</th>
+                    <th scope="col">Champions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {this.state.seasonData.map(p=> this.renderSeasons(p.record_year,p.final_CFP_rank,p.total_wins,p.total_losses,p.conference_losses,p.conference_wins,p.champions))}
+                </tbody>
+                </table>
+                
             <PopupState  variant="popover" popupId="demo-popup-popover">
               {popupState => (
                 <div>
@@ -178,6 +291,7 @@ class School extends Component {
               )}
             </PopupState>
                 {/* {this.state.players.map(p => this.renderPlayers(p.image,p.name))} */}
+
                 {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.number,p.recruting_rank,p.player_image))}
                 {this.state.schoolData.map(p => console.log(p))}
             </div>
@@ -206,7 +320,25 @@ class School extends Component {
     await this.getMostRecentPlayerID();
     await this.getPlayerData();
     console.log(this.state.mostRecentPlayer_id);
-  }  
+  }
+
+  addNewSeason = async _=>{
+    await this.setState({season_id: this.state.mostRecentSeason_id+1});
+    let team_name = this.state.schoolData.map((p)=>p.team_name);
+    await fetch(`http://localhost:4000/addHasRecord?season_id=${this.state.season_id}&team_name=${team_name}&record_year=${this.state.year}`)
+    .then(res => res.json())
+    .catch(err => console.error(err));
+
+    await fetch(`http://localhost:4000/addSeasonRecords?final_CFP_rank=${this.state.final_cfr_rank}&total_wins=${this.state.total_wins}&total_losses=${this.state.total_losses}&conference_losses=${this.state.conference_losses}&conference_wins=${this.state.conference_wins}&season_id=${this.state.season_id}&champions=${this.state.champions}`)
+    .then(res => res.json())
+    .catch(err => console.error(err));
+
+    await this.getMostRecentSeasonID();
+    await this.getSeasonData();
+    console.log(this.state.mostRecentSeason_id);
+  }
+
+
 }
 
 export default School;
