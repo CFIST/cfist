@@ -116,6 +116,22 @@ var db = mysql.createConnection({
       }
     });
   });
+
+  app.get("/searchResults", (req, res) => {
+    const { searchInput } = req.query;
+    db.query(
+      `SELECT * FROM school WHERE name LIKE '%${searchInput}%'`,
+      (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      }
+    );
+  });
   
   app.get("/getPlayerData", (req, res) => {
     const {team_name, conference}  = req.query;
@@ -206,8 +222,8 @@ var db = mysql.createConnection({
   });
 
   app.get("/addCoach", (req, res) => {
-    const {gameplan, coach_id, experience, coach_name}  = req.query;
-    const INSERT_USER_QUERY = `INSERT INTO coach (gameplan, coach_id, experience, coach_name) VALUES( '${gameplan}','${coach_id}','${experience}','${coach_name}')`;
+    const {coach_id, experience, coach_name}  = req.query;
+    const INSERT_USER_QUERY = `INSERT INTO coach ( coach_id, experience, coach_name) VALUES( '${coach_id}','${experience}','${coach_name}')`;
     db.query(INSERT_USER_QUERY, (err, results) => {
       if (err) {
         return res.send(err);
@@ -234,8 +250,8 @@ var db = mysql.createConnection({
   });
 
     app.get("/addPlayers", (req, res) => {
-      const {player_id, number, name,nfl_team, recruting_rank,player_image}  = req.query;
-      const INSERT_USER_QUERY = `INSERT INTO players (player_id, number, name,nfl_team,recruting_rank,player_image) VALUES( '${player_id}','${number}','${name}','${nfl_team}','${recruting_rank}','${player_image}')`;
+      const {player_id, number, name,nfl_team,position, recruting_rank,player_image}  = req.query;
+      const INSERT_USER_QUERY = `INSERT INTO players (player_id, number, name,nfl_team,position,recruting_rank,player_image) VALUES( '${player_id}','${number}','${name}','${nfl_team}','${position}','${recruting_rank}','${player_image}')`;
       db.query(INSERT_USER_QUERY, (err, results) => {
         if (err) {
           return res.send(err);
@@ -249,8 +265,8 @@ var db = mysql.createConnection({
 
 
     app.get("/addHasRecord", (req, res) => {
-      const {season_id, team_name, record_year}  = req.query;
-      const INSERT_USER_QUERY = `INSERT INTO has_record (season_id, team_name, record_year) VALUES( '${season_id}','${team_name}','${record_year}')`;
+      const {season_id, team_name, record_year,conference}  = req.query;
+      const INSERT_USER_QUERY = `INSERT INTO has_record (season_id, team_name, record_year,conference) VALUES( '${season_id}','${team_name}','${record_year}','${conference}')`;
       db.query(INSERT_USER_QUERY, (err, results) => {
         if (err) {
           return res.send(err);
@@ -277,9 +293,9 @@ var db = mysql.createConnection({
     });
 
     app.get("/getSeasonData", (req, res) => {
-      const {team_name}  = req.query;
+      const {team_name, conference}  = req.query;
       db.query(`SELECT * FROM has_record JOIN season_records ON(has_record.season_id = season_records.season_id)
-          WHERE team_name = '${team_name}';`, (err, results) => {
+          WHERE team_name = '${team_name}' AND conference = '${conference}';`, (err, results) => {
         if (err) {
           return res.send(err);
         } 

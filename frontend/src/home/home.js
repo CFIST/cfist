@@ -5,6 +5,8 @@ import Navigation from '../navigation';
 import Box from '@material-ui/core/Box';
 import Popover from '@material-ui/core/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import ReactSearchBox from 'react-search-box'
+
 
 
 class Home extends Component {
@@ -28,13 +30,13 @@ class Home extends Component {
         
         coach_id:"",
         experience:"",
-        gameplan:"",
         coach_name:"",
 
         mostRecentCoach_id:"",
 
         cardData:[],
-        searchQuery:""
+
+        searchInput:""
     }
 
     async componentWillMount(){
@@ -42,6 +44,19 @@ class Home extends Component {
       console.log(this.state.mostRecentCoach_id);
       await this.getSchools();
     }
+
+    getSearchResults = async SQLParam => {
+      fetch(
+        `http://localhost:4000/searchResults?searchInput=${SQLParam}`
+      )
+        .then(res => res.json())
+        .then(res => {
+          this.setState({cardData: res.data});
+        })
+        .catch(err => console.error(err));
+  
+  
+    };
 
     getSchools = async _=>{
       await fetch(`http://localhost:4000/getSchools`)
@@ -77,14 +92,14 @@ class Home extends Component {
             <div className="front">
               <img className="flip-container"src={school_logo} alt={name}/>
             </div>
-            <div align="center" class="back">
-              <strong style={{color:"white", fontSize:"150%"}}> {name} </strong>
+            <div align="center" className="back" style={{backgroundColor:"#ECF0F1"}}>
+              <strong style={{color:"#4c8bf5", fontSize:"150%"}}> {name} </strong>
               <br/>
-              <p style={{color:"white", fontSize:"100%"}}> State: {state} <br/>
+              <p style={{color:"#4c8bf5", fontSize:"100%"}}> State: {state} <br/>
                Zip Code: {zip_code}<br/>
                City: {city}<br/>
                Tuition: {tuition}<br/>
-                <Link to ={{pathname:'school', schoolProps: {schoolName: name, zipcode: zip_code}}}> <button className="btn btn-success" color="stylish-color">View Team</button></Link></p>
+                <Link to ={{pathname:'school', schoolProps: {schoolName: name, zipcode: zip_code}}}> <button className="btn btn-primary" color="stylish-color">View Team</button></Link></p>
             </div>
           </div>
         </div>
@@ -92,11 +107,47 @@ class Home extends Component {
         );
     }
 
+  handleSearch = e => {
+    this.setState({ searchInput: e.target.value });
+    console.log(e.target.value);
+  };
+
+  enterPressed = event => {
+    let code = event.keyCode || event.which;
+    if (code === 13) {
+      //13 is the enter keycode
+      event.preventDefault();
+      console.log(this.state.searchInput);
+
+      let searchWords = this.state.searchInput.trim().split(' ');
+      this.getSearchResults(this.generateSQLSearchParam(searchWords));
+    }
+
+  };
+
+  generateSQLSearchParam(searchWords) {
+    let SQLSearchParam = '';
+    for (let i = 0; i < searchWords.length; i++) {
+      if (i === 0) {
+        SQLSearchParam = SQLSearchParam.concat(searchWords[i]);
+      } else {
+        SQLSearchParam = SQLSearchParam.concat("%20" + searchWords[i]);
+      }
+    }
+
+    return SQLSearchParam;
+  }
+
+
     render(){
         return (
-            <div>
-                <div id="top-margin"> 
-                <PopupState  variant="popover" popupId="demo-popup-popover">
+          <div id="aligndata" align="center">
+            <div style={{paddingTop:"3%", width:"50%", alignItems:"center"}}>
+            <div class="container">
+              <input placeholder="Search using School Name"  class='js-search' type="text" onChange={this.handleSearch} onKeyDown={this.enterPressed}/>
+            </div>
+            </div>
+          <PopupState  variant="popover" popupId="demo-popup-popover">
               {popupState => (
                 <div>
                   <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
@@ -152,9 +203,6 @@ class Home extends Component {
                     <p align="top" style={{color:"blue"}}> Experience  <br/>
                     <input id="experience_box" type="textbox" rows="5" label="experience" onChange={e =>this.setState({experience: e.target.value})}/>
                     </p>
-                    <p align="top" style={{color:"blue"}}> Gameplan   <br/>
-                    <input id="gameplan_box" type="textbox" rows="5" label="gameplan" onChange={e =>this.setState({gameplan: e.target.value})}/>
-                    </p>
                     <button className="btn btn-success"  color="primary" onClick={this.addNewSchool}>ADD</button>
                     </Box  >
                     </div>
@@ -162,10 +210,7 @@ class Home extends Component {
                 </div>
               )}
             </PopupState>
-            <div className="card-inline" id="cards" >
             {this.state.cardData.map(p => this.renderSchoolCard(p.tuition,p.state,p.zip_code,p.name,p.city,p.school_logo))}
-            </div>
-              </div>
             </div>
         );
     }
@@ -187,7 +232,6 @@ class Home extends Component {
       console.log(this.state.team_logo);
       console.log(this.state.coach_id);
       console.log(this.state.experience);
-      console.log(this.state.gameplan);
       console.log(this.state.coach_name);
 
 
@@ -207,7 +251,7 @@ class Home extends Component {
       .then(res => res.json())
       .catch(err => console.error(err));
 
-      await fetch(`http://localhost:4000/addCoach?gameplan=${this.state.gameplan}&coach_id=${this.state.coach_id}&experience=${this.state.experience}&coach_name=${this.state.coach_name}`)
+      await fetch(`http://localhost:4000/addCoach?coach_id=${this.state.coach_id}&experience=${this.state.experience}&coach_name=${this.state.coach_name}`)
       .then(res => res.json())
       .catch(err => console.error(err));
 

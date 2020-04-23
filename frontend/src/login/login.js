@@ -79,7 +79,9 @@ class Login extends Component {
         ))
         )))
         
-        if(this.state.pass === this.state.password && this.state.pass !== ""){
+        console.log(this.state.pass);
+        console.log(this.state.password);
+        if(this.state.pass === this.state.password && this.state.pass !== "" && this.state.pass !== null && this.state.pass !== undefined){
           this.setState({validate: true});
         }
     };

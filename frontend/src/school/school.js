@@ -22,6 +22,7 @@ class School extends Component {
       player_number:"",
       player_name:"",
       nfl_team: "",
+      position:"",
       player_recruting_rank:"",
       player_image:"",
 
@@ -95,7 +96,9 @@ class School extends Component {
 
     getSeasonData =  async _=>{
       let team_name = await this.state.schoolData.map((p)=>p.team_name);
-      await fetch(`http://localhost:4000/getSeasonData?team_name=${team_name}`)
+      let conference = await this.state.schoolData.map((p)=>p.conference);
+
+      await fetch(`http://localhost:4000/getSeasonData?team_name=${team_name}&conference=${conference}`)
       .then(res => res.json())
       .then(res => {
         this.setState({ seasonData: res.data });
@@ -120,7 +123,7 @@ class School extends Component {
 
     }
 
-    renderPlayers = (name,nfl_team,number,recruting_rank,player_image)=>{
+    renderPlayers = (name,nfl_team,position,number,recruting_rank,player_image)=>{
         return (
         <div className="card-inline" key={name}>
           <MDBCol>
@@ -130,6 +133,7 @@ class School extends Component {
                 <MDBCardTitle>{name}</MDBCardTitle>
                 NFL Team: {nfl_team}<br/>
                 Number: {number}<br/>
+                Position: {position} <br/>
                 Recruting Rank: {recruting_rank}<br/>
               </MDBCardBody>
             </MDBCard>
@@ -277,6 +281,9 @@ class School extends Component {
                     <p align="top" style={{color:"blue"}}> NFL Team<br/>
                     <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({nfl_team: e.target.value})}/>
                     </p>
+                    <p align="top" style={{color:"blue"}}> Position<br/>
+                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({position: e.target.value})}/>
+                    </p>
                     <p align="top" style={{color:"blue"}}> Recruting Rank<br/>
                     <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({player_recruting_rank: e.target.value})}/>
                     </p>
@@ -292,7 +299,7 @@ class School extends Component {
             </PopupState>
                 {/* {this.state.players.map(p => this.renderPlayers(p.image,p.name))} */}
 
-                {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.number,p.recruting_rank,p.player_image))}
+                {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.position,p.number,p.recruting_rank,p.player_image))}
                 {this.state.schoolData.map(p => console.log(p))}
             </div>
           </div>
@@ -305,6 +312,7 @@ class School extends Component {
     console.log(this.state.player_number);
     console.log(this.state.player_name);
     console.log(this.state.nfl_team);
+    console.log(this.state.position);
     console.log(this.state.player_recruting_rank);
     console.log(this.state.player_image);
     let team_name = this.state.schoolData.map((p)=>p.team_name);
@@ -313,7 +321,7 @@ class School extends Component {
     .then(res => res.json())
     .catch(err => console.error(err));
 
-    await fetch(`http://localhost:4000/addPlayers?player_id=${this.state.player_id}&number=${this.state.player_number}&name=${this.state.player_name}&nfl_team=${this.state.nfl_team}&recruting_rank=${this.state.player_recruting_rank}&player_image=${this.state.player_image}`)
+    await fetch(`http://localhost:4000/addPlayers?player_id=${this.state.player_id}&number=${this.state.player_number}&name=${this.state.player_name}&nfl_team=${this.state.nfl_team}&position=${this.state.position}&recruting_rank=${this.state.player_recruting_rank}&player_image=${this.state.player_image}`)
     .then(res => res.json())
     .catch(err => console.error(err));
 
@@ -325,7 +333,8 @@ class School extends Component {
   addNewSeason = async _=>{
     await this.setState({season_id: this.state.mostRecentSeason_id+1});
     let team_name = this.state.schoolData.map((p)=>p.team_name);
-    await fetch(`http://localhost:4000/addHasRecord?season_id=${this.state.season_id}&team_name=${team_name}&record_year=${this.state.year}`)
+    let conference = this.state.schoolData.map((p)=>p.conference)
+    await fetch(`http://localhost:4000/addHasRecord?season_id=${this.state.season_id}&team_name=${team_name}&record_year=${this.state.year}&conference=${conference}`)
     .then(res => res.json())
     .catch(err => console.error(err));
 
