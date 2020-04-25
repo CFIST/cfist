@@ -36,7 +36,7 @@ class School extends Component {
       champions:"",
 
       playerData:[],
-      seasonData:[]
+      seasonData:[],
     }
    
 
@@ -155,9 +155,106 @@ class School extends Component {
     }
   
 
+  showAddSeason = _=>{
+    if(localStorage.getItem("loginToken") == null){
+      return <div> </div>;
+    }
+    else{
+      return (
+        <PopupState  variant="popover" popupId="demo-popup-popover">
+              {popupState => (
+                <div>
+                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
+                    Add New Season
+                  </button>
+                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
+                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
+                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}} align="center">        
+                    <Box p={5}>
+                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Season </p>
+                    <p align="top" style={{color:"blue"}}> Year <br/>
+
+                    <input id="year_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({year: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Final CFP Rank<br/>
+                    <input id="final_CFP_rank_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({final_cfr_rank: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Total Wins<br/>
+                    <input id="total_wins_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({total_wins: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Total Losses<br/>
+                    <input id="total_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({total_losses: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Conference Wins<br/>
+                    <input id="conference_wins_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_wins: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Conference Losses<br/>
+                    <input id="conference_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_losses: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Champions<br/>
+                    <input id="chapions_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({champions: e.target.value})}/>
+                    </p>
+                    <button className="btn btn-success"  color="primary" onClick={this.addNewSeason}>ADD</button>
+                    </Box>
+                    </div>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+      );
+      }
+  }
+
+  showAddPlayer = _=>{
+    if(localStorage.getItem("loginToken") == null){
+      return <div> </div>;
+    }
+    else{
+      return (
+        <PopupState  variant="popover" popupId="demo-popup-popover">
+              {popupState => (
+                <div>
+                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
+                    Add New Player
+                  </button>
+                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
+                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
+                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}} align="center">        
+                    <Box p={5}>
+                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Player </p>
+                    <p align="top" style={{color:"blue"}}> Name <br/>
+                    <input id="school_name_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({player_name: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Number<br/>
+                    <input id="zipcode_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({player_number: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> NFL Team<br/>
+                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({nfl_team: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Position<br/>
+                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({position: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Recruting Rank<br/>
+                    <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({player_recruting_rank: e.target.value})}/>
+                    </p>
+                    <p align="top" style={{color:"blue"}}> Image Link<br/>
+                    <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({player_image: e.target.value})}/>
+                    </p>
+                    <button className="btn btn-success"  color="primary" onClick={this.addNewPlayer}>ADD</button>
+                    </Box>
+                    </div>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+      );
+      }
+  }
+
     render(){
         return (
           <div className="wrapper" align="center">
+
           <nav id="sidebar" style={{alignSelf:"center"}}>
             <div className="sidebar-header" style={{alignContent:"center"}}>
               <img className="center" style={{alignContent:"center"}} src={this.state.schoolData.map ((p)=> p.school_logo)} width="200" height="200" alt="LOGO" />
@@ -200,49 +297,9 @@ class School extends Component {
   
           {/* <!-- Page Content  --> */}
           <div id="content">
+
             <div className="card-inline" id="cards">
-
-
-            <PopupState  variant="popover" popupId="demo-popup-popover">
-              {popupState => (
-                <div>
-                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
-                    Add New Season
-                  </button>
-                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
-                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
-                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}} align="center">        
-                    <Box p={5}>
-                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Season </p>
-                    <p align="top" style={{color:"blue"}}> Year <br/>
-
-                    <input id="year_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({year: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Final CFP Rank<br/>
-                    <input id="final_CFP_rank_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({final_cfr_rank: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Total Wins<br/>
-                    <input id="total_wins_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({total_wins: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Total Losses<br/>
-                    <input id="total_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({total_losses: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Conference Wins<br/>
-                    <input id="conference_wins_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_wins: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Conference Losses<br/>
-                    <input id="conference_losses_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({conference_losses: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Champions<br/>
-                    <input id="chapions_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({champions: e.target.value})}/>
-                    </p>
-                    <button className="btn btn-success"  color="primary" onClick={this.addNewSeason}>ADD</button>
-                    </Box>
-                    </div>
-                  </Popover>
-                </div>
-              )}
-            </PopupState>
+            {this.showAddSeason()}
 
             <table class="table">
                 <thead>
@@ -261,44 +318,10 @@ class School extends Component {
                 </tbody>
                 </table>
                 
-            <PopupState  variant="popover" popupId="demo-popup-popover">
-              {popupState => (
-                <div>
-                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
-                    Add New Player
-                  </button>
-                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
-                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
-                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}} align="center">        
-                    <Box p={5}>
-                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Player </p>
-                    <p align="top" style={{color:"blue"}}> Name <br/>
-                    <input id="school_name_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({player_name: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Number<br/>
-                    <input id="zipcode_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({player_number: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> NFL Team<br/>
-                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({nfl_team: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Position<br/>
-                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({position: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Recruting Rank<br/>
-                    <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({player_recruting_rank: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Image Link<br/>
-                    <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({player_image: e.target.value})}/>
-                    </p>
-                    <button className="btn btn-success"  color="primary" onClick={this.addNewPlayer}>ADD</button>
-                    </Box>
-                    </div>
-                  </Popover>
-                </div>
-              )}
-            </PopupState>
+            
                 {/* {this.state.players.map(p => this.renderPlayers(p.image,p.name))} */}
 
+                {this.showAddPlayer()}
                 {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.position,p.number,p.recruting_rank,p.player_image))}
                 {this.state.schoolData.map(p => console.log(p))}
             </div>

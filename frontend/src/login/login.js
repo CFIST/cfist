@@ -82,7 +82,9 @@ class Login extends Component {
         console.log(this.state.pass);
         console.log(this.state.password);
         if(this.state.pass === this.state.password && this.state.pass !== "" && this.state.pass !== null && this.state.pass !== undefined){
+          localStorage.setItem("loginToken", this.state.username);
           this.setState({validate: true});
+          window.location.reload(false);
         }
     };
 }

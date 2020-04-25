@@ -33,10 +33,9 @@ class Home extends Component {
         coach_name:"",
 
         mostRecentCoach_id:"",
-
         cardData:[],
+        searchInput:"",
 
-        searchInput:""
     }
 
     async componentWillMount(){
@@ -99,7 +98,7 @@ class Home extends Component {
                Zip Code: {zip_code}<br/>
                City: {city}<br/>
                Tuition: {tuition}<br/>
-                <Link to ={{pathname:'school', schoolProps: {schoolName: name, zipcode: zip_code}}}> <button className="btn btn-primary" color="stylish-color">View Team</button></Link></p>
+              <Link to ={{pathname:'school', schoolProps: {schoolName: name, zipcode: zip_code}}}> <button className="btn btn-primary" color="stylish-color">View Team</button></Link></p>
             </div>
           </div>
         </div>
@@ -138,79 +137,89 @@ class Home extends Component {
     return SQLSearchParam;
   }
 
+  showAddSchool = _=>{
+    if(localStorage.getItem("loginToken") == null){
+      return <div> </div>;
+    }
+    else{
+      return (
+        <PopupState  variant="popover" popupId="demo-popup-popover">
+        {popupState => (
+          <div>
+            <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
+              Add New School
+            </button>
+            <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
+                  transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
+              <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}}>        
+              <Box >
+              <p align="center" style={{fontSize:"35px",color:"blue"}}> Add New School </p>
+              <p align="top" style={{color:"blue"}}> School <br/>
+              <input id="school_name_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({school_name: e.target.value})}/>
+              </p>
 
-    render(){
+              <p align="top" style={{color:"blue"}}> Zipcode<br/>
+              <input id="zipcode_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({zip_code: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> City<br/>
+              <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({city: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> State<br/>
+              <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({state: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Tuition<br/>
+              <input id="tuition_box" type="textbox" rows="5" label="tuition" onChange={e =>this.setState({tuition: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Weblink of school logo<br/>
+              <input id="school_logo_box" type="textbox" rows="5" label="school_logo" onChange={e =>this.setState({school_logo: e.target.value})}/>
+              </p>
+
+              <p align="top" style={{color:"blue"}}> Teamname<br/>
+              <input id="teamname_box" type="textbox" rows="5" label="teamname" onChange={e =>this.setState({teamname: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Conference<br/>
+              <input id="conference_box" type="textbox" rows="5" label="conference" onChange={e =>this.setState({conference: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Mascot<br/>
+              <input id="mascot_box" type="textbox" rows="5" label="mascot" onChange={e =>this.setState({mascot: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> National Championships<br/>
+              <input id="nationalChampionships_box" type="textbox" rows="5" label="nationalChampionships" onChange={e =>this.setState({nationalChampionships: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Heisman Tropies<br/>
+              <input id="heismanTropies_box" type="textbox" rows="5" label="heismanTropies" onChange={e =>this.setState({heismanTropies: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Weblink of Team Logo<br/>
+              <input id="team_logo_box" type="textbox" rows="5" label="team_logo" onChange={e =>this.setState({team_logo: e.target.value})}/>
+              </p>
+
+              <p align="top" style={{color:"blue"}}> Coach Name<br/>
+              <input id="coach_name_box" type="textbox" rows="5" label="coach_name" onChange={e =>this.setState({coach_name: e.target.value})}/>
+              </p>
+              <p align="top" style={{color:"blue"}}> Experience  <br/>
+              <input id="experience_box" type="textbox" rows="5" label="experience" onChange={e =>this.setState({experience: e.target.value})}/>
+              </p>
+              <button className="btn btn-success"  color="primary" onClick={this.addNewSchool}>ADD</button>
+              </Box  >
+              </div>
+            </Popover>
+          </div>
+        )}
+      </PopupState>
+      );
+      }
+  }
+
+  render(){
         return (
-          <div id="aligndata" align="center">
-            <div style={{paddingTop:"3%", width:"50%", alignItems:"center"}}>
+          <div id="aligndata" align = 'center'>
+            <div style={{paddingTop:"3%", alignItems:"center"}}>
             <div class="container">
               <input placeholder="Search using School Name"  class='js-search' type="text" onChange={this.handleSearch} onKeyDown={this.enterPressed}/>
             </div>
-            </div>
-          <PopupState  variant="popover" popupId="demo-popup-popover">
-              {popupState => (
-                <div>
-                  <button className="btn btn-primary" color="primary" {...bindTrigger(popupState)}>
-                    Add New School
-                  </button>
-                  <Popover {...bindPopover(popupState)} anchorOrigin={{height: "100%", width: "50vw", vertical: 'bottom', horizontal: 'center' }}
-                        transformOrigin={{ height: "100%", width: "50vw", vertical: 'top', horizontal: 'center'}}>
-                    <div style={{paddingTop:"10%",paddingBottom:"10%", paddingLeft:"10%", paddingRight:"10%"}}>        
-                    <Box >
-                    <p align="center" style={{fontSize:"35px",color:"blue"}}> Add New School </p>
-                    <p align="top" style={{color:"blue"}}> School <br/>
-                    <input id="school_name_box" type="textbox" rows="1" label="School Name" onChange={e =>this.setState({school_name: e.target.value})}/>
-                    </p>
-
-                    <p align="top" style={{color:"blue"}}> Zipcode<br/>
-                    <input id="zipcode_box" type="textbox" rows="1" label="zipcode" onChange={e =>this.setState({zip_code: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> City<br/>
-                    <input id="city_box"  type="textbox" rows="5" label="city" onChange={e =>this.setState({city: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> State<br/>
-                    <input id="state_box" type="textbox" rows="5" label="state" onChange={e =>this.setState({state: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Tuition<br/>
-                    <input id="tuition_box" type="textbox" rows="5" label="tuition" onChange={e =>this.setState({tuition: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Weblink of school logo<br/>
-                    <input id="school_logo_box" type="textbox" rows="5" label="school_logo" onChange={e =>this.setState({school_logo: e.target.value})}/>
-                    </p>
-
-                    <p align="top" style={{color:"blue"}}> Teamname<br/>
-                    <input id="teamname_box" type="textbox" rows="5" label="teamname" onChange={e =>this.setState({teamname: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Conference<br/>
-                    <input id="conference_box" type="textbox" rows="5" label="conference" onChange={e =>this.setState({conference: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Mascot<br/>
-                    <input id="mascot_box" type="textbox" rows="5" label="mascot" onChange={e =>this.setState({mascot: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> National Championships<br/>
-                    <input id="nationalChampionships_box" type="textbox" rows="5" label="nationalChampionships" onChange={e =>this.setState({nationalChampionships: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Heisman Tropies<br/>
-                    <input id="heismanTropies_box" type="textbox" rows="5" label="heismanTropies" onChange={e =>this.setState({heismanTropies: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Weblink of Team Logo<br/>
-                    <input id="team_logo_box" type="textbox" rows="5" label="team_logo" onChange={e =>this.setState({team_logo: e.target.value})}/>
-                    </p>
-
-                    <p align="top" style={{color:"blue"}}> Coach Name<br/>
-                    <input id="coach_name_box" type="textbox" rows="5" label="coach_name" onChange={e =>this.setState({coach_name: e.target.value})}/>
-                    </p>
-                    <p align="top" style={{color:"blue"}}> Experience  <br/>
-                    <input id="experience_box" type="textbox" rows="5" label="experience" onChange={e =>this.setState({experience: e.target.value})}/>
-                    </p>
-                    <button className="btn btn-success"  color="primary" onClick={this.addNewSchool}>ADD</button>
-                    </Box  >
-                    </div>
-                  </Popover>
-                </div>
-              )}
-            </PopupState>
+            {this.showAddSchool()}
             {this.state.cardData.map(p => this.renderSchoolCard(p.tuition,p.state,p.zip_code,p.name,p.city,p.school_logo))}
+            </div>
             </div>
         );
     }

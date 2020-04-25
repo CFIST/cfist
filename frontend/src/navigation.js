@@ -20,6 +20,22 @@ import Signup from "./signup/signup";
             this.setState({ isOpen: !this.state.isOpen });
         }
     
+        log_in_out = _=>{
+          if(localStorage.getItem("loginToken") == null){
+            return <a href="/"> <button className="btn btn-primary">Login</button></a>
+          }
+          else{
+            return <button className="btn btn-primary" onClick={this.destroy}>Logout</button>
+          }
+        }
+      
+      
+        destroy = _=>{
+          console.log(localStorage.getItem("loginToken"));
+          localStorage.removeItem("loginToken");
+          window.location.pathname = "/home";
+        }
+
       render() {
         return (
           <Router>
@@ -28,14 +44,9 @@ import Signup from "./signup/signup";
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
                     <MDBNavbarNav right>
-                        <MDBNavItem>
-                        <MDBNavLink style={{color:"white"}} to="/home">Home</MDBNavLink>
-                        </MDBNavItem>
-                    </MDBNavbarNav>
-                    <MDBNavbarNav right>
-                        <MDBNavItem>
-                          <a href="/"> <button className="btn btn-light">Login</button></a>
-                        </MDBNavItem>
+                    <MDBNavItem>
+                      {this.log_in_out()}
+                      </MDBNavItem>
                     </MDBNavbarNav>
                     </MDBCollapse>
                 </MDBNavbar>
@@ -47,11 +58,6 @@ import Signup from "./signup/signup";
             </Switch>
           </Router>
         );
-      }
-
-      logIn = _=>{
-        console.log("login");
-        return <Redirect to={{ pathname: '/home'}}/>
       }
     }
     export default Navigation;
