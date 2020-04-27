@@ -86,7 +86,7 @@ class Home extends Component {
     renderSchoolCard = (tuition,state,zip_code,name,city,school_logo)=>{
         var delButton = '';
         if(localStorage.getItem("loginToken") != null){
-            delButton = <button className="btn btn-danger"  color="primary" onClick={() => this.deleteSchool(zip_code)}>Delete School</button>
+            delButton = <button className="btn btn-danger"  color="primary" onClick={() => this.deleteSchool(zip_code,name)}>Delete School</button>
         }
         return(
         <div className="card-inline">
@@ -278,21 +278,21 @@ class Home extends Component {
       console.log(this.state.mostRecentCoach_id);
     }
 
-    deleteSchool = async zip => {
+    deleteSchool = async (zip,name) => {
 
-      await fetch(`http://localhost:4000/deleteTeamRecords?zip_code=${zip}`)
+      await fetch(`http://localhost:4000/deleteTeamRecords?zip_code=${zip}&name=${name}`)
       .then(res => res.json())
       .catch(err => console.error(err));
 
-      await fetch(`http://localhost:4000/deleteTeamPlayers?zip_code=${zip}`)
+      await fetch(`http://localhost:4000/deleteTeamPlayers?zip_code=${zip}&name=${name}`)
       .then(res => res.json())
       .catch(err => console.error(err));
 
-      await fetch(`http://localhost:4000/deleteTeamCoach?zip_code=${zip}`)
+      await fetch(`http://localhost:4000/deleteTeamCoach?zip_code=${zip}&name=${name}`)
       .then(res => res.json())
       .catch(err => console.error(err));
 
-      await fetch(`http://localhost:4000/deleteSchool?zip_code=${zip}`)
+      await fetch(`http://localhost:4000/deleteSchool?zip_code=${zip}&name=${name}`)
       .then(res => res.json())
       .catch(err => console.error(err));
 
