@@ -123,8 +123,13 @@ class School extends Component {
 
     }
 
-    renderPlayers = (name,nfl_team,position,number,recruting_rank,player_image)=>{
-        return (
+    renderPlayers = (name,nfl_team,position,number,recruting_rank,player_image,player_id)=>{
+      var delButton = '';
+      console.log(localStorage.getItem("loginToken"));
+      if(localStorage.getItem("loginToken") != null){
+        delButton = <button className="btn btn-danger"  color="primary" onClick={() => this.deletePlayer(player_id)}>Delete Player</button>
+      }
+      return (
         <div className="card-inline" key={name}>
           <MDBCol>
             <MDBCard style={{ width: '17rem' }}>
@@ -135,6 +140,7 @@ class School extends Component {
                 Number: {number}<br/>
                 Position: {position} <br/>
                 Recruting Rank: {recruting_rank}<br/>
+                {delButton}
               </MDBCardBody>
             </MDBCard>
           </MDBCol>
@@ -322,7 +328,7 @@ class School extends Component {
                 {/* {this.state.players.map(p => this.renderPlayers(p.image,p.name))} */}
 
                 {this.showAddPlayer()}
-                {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.position,p.number,p.recruting_rank,p.player_image))}
+                {this.state.playerData.map(p=> this.renderPlayers(p.name,p.nfl_team,p.position,p.number,p.recruting_rank,p.player_image, p.player_id))}
                 {this.state.schoolData.map(p => console.log(p))}
             </div>
           </div>
@@ -352,6 +358,15 @@ class School extends Component {
     await this.getPlayerData();
     console.log(this.state.mostRecentPlayer_id);
   }
+
+  deletePlayer = async player_id => {
+      console.log(player_id);
+      await fetch(`http://localhost:4000/deletePlayer?player_id=${player_id}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await this.getPlayerData();
+    };
 
   addNewSeason = async _=>{
     await this.setState({season_id: this.state.mostRecentSeason_id+1});

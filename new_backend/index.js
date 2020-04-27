@@ -150,6 +150,7 @@ var db = mysql.createConnection({
   });
 
 
+
   app.get("/addUser", (req, res) => {
     console.log("added a user");
     const {username, password, email, administrator}  = req.query;
@@ -172,6 +173,23 @@ var db = mysql.createConnection({
       if (err) {
         return res.send(err);
       } else {
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
+  app.get("/deleteSchool", (req, res) => {
+    const {zip_code}  = req.query;
+    DELETE_USER_QUERY = 'DELETE school, college_team, football_program, coached_by, belongs_to, coach, players, has_record, season_records FROM school JOIN football_program ON school.name = football_program.school_name JOIN college_team on football_program.team_name = college_team.team_name JOIN coached_by on coached_by.team_name = football_program.team_name JOIN belongs_to on belongs_to.team_name = football_program.team_name JOIN coach on coached_by.coach_id = coach.coach_id JOIN players on players.player_id = belongs_to.player_id JOIN has_record on has_record.team_name = football_program.team_name JOIN season_records on season_records.season_id = has_record.season_id WHERE school.zip_code = ';
+    DELETE_USER_QUERY = DELETE_USER_QUERY.concat(zip_code)
+    db.query(DELETE_USER_QUERY, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.send(err);
+      } else {
+        console.log(res.json);
         return res.json({
           data: results
         });
@@ -253,6 +271,21 @@ var db = mysql.createConnection({
       const {player_id, number, name,nfl_team,position, recruting_rank,player_image}  = req.query;
       const INSERT_USER_QUERY = `INSERT INTO players (player_id, number, name,nfl_team,position,recruting_rank,player_image) VALUES( '${player_id}','${number}','${name}','${nfl_team}','${position}','${recruting_rank}','${player_image}')`;
       db.query(INSERT_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
+
+    app.get("/deletePlayer", (req, res) => {
+      const {player_id}  = req.query;
+      var DELETE_USER_QUERY = 'DELETE players, belongs_to FROM players JOIN belongs_to ON players.player_id = belongs_to.player_id WHERE players.player_id = ';
+      DELETE_USER_QUERY = DELETE_USER_QUERY.concat(player_id);
+      db.query(DELETE_USER_QUERY, (err, results) => {
         if (err) {
           return res.send(err);
         } else {

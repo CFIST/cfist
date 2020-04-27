@@ -84,7 +84,11 @@ class Home extends Component {
     }
 
     renderSchoolCard = (tuition,state,zip_code,name,city,school_logo)=>{
-      return(
+        var delButton = '';
+        if(localStorage.getItem("loginToken") != null){
+            delButton = <button className="btn btn-danger"  color="primary" onClick={() => this.deleteSchool(zip_code)}>Delete School</button>
+        }
+        return(
         <div className="card-inline">
           <div className="flip-container" onTouchStart="this.classList.toggle('hover');">
           <div className="flipper">
@@ -99,10 +103,15 @@ class Home extends Component {
                City: {city}<br/>
                Tuition: {tuition}<br/>
               <Link to ={{pathname:'school', schoolProps: {schoolName: name, zipcode: zip_code}}}> <button className="btn btn-primary" color="stylish-color">View Team</button></Link></p>
+
+
             </div>
           </div>
         </div>
+        <br></br>
+        {delButton}
         </div>
+
         );
     }
 
@@ -268,6 +277,15 @@ class Home extends Component {
       await this.getMostRecentCoachID();
       console.log(this.state.mostRecentCoach_id);
     }
+
+    deleteSchool = async zip => {
+      console.log(zip);
+      await fetch(`http://localhost:4000/deleteSchool?zip_code=${zip}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await this.getSchools();
+    };
 }
 
 export default Home;

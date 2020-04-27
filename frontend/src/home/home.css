@@ -23,6 +23,7 @@
 .flip-container, .front, .back {
 	width: 250px;
 	height: 250px;
+
 }
 
 /* flip speed goes here */
@@ -54,7 +55,6 @@
 /* back, initially hidden pane */
 .back {
     transform: rotateY(180deg);
-	
 }
 
 
