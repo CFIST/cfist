@@ -279,7 +279,19 @@ class Home extends Component {
     }
 
     deleteSchool = async zip => {
-      console.log(zip);
+
+      await fetch(`http://localhost:4000/deleteTeamRecords?zip_code=${zip}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/deleteTeamPlayers?zip_code=${zip}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/deleteTeamCoach?zip_code=${zip}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
       await fetch(`http://localhost:4000/deleteSchool?zip_code=${zip}`)
       .then(res => res.json())
       .catch(err => console.error(err));

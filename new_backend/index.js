@@ -181,8 +181,63 @@ var db = mysql.createConnection({
   });
 
   app.get("/deleteSchool", (req, res) => {
+    console.log('delete School');
     const {zip_code}  = req.query;
-    DELETE_USER_QUERY = 'DELETE school, college_team, football_program, coached_by, belongs_to, coach, players, has_record, season_records FROM school JOIN football_program ON school.name = football_program.school_name JOIN college_team on football_program.team_name = college_team.team_name JOIN coached_by on coached_by.team_name = football_program.team_name JOIN belongs_to on belongs_to.team_name = football_program.team_name JOIN coach on coached_by.coach_id = coach.coach_id JOIN players on players.player_id = belongs_to.player_id JOIN has_record on has_record.team_name = football_program.team_name JOIN season_records on season_records.season_id = has_record.season_id WHERE school.zip_code = ';
+    DELETE_USER_QUERY = 'DELETE school, college_team, football_program FROM school JOIN football_program ON school.name = football_program.school_name JOIN college_team on football_program.team_name = college_team.team_name WHERE school.zip_code = ';
+    DELETE_USER_QUERY = DELETE_USER_QUERY.concat(zip_code)
+    db.query(DELETE_USER_QUERY, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.send(err);
+      } else {
+        console.log(res.json);
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
+  app.get("/deleteTeamRecords", (req, res) => {
+    console.log('delete records')
+    const {zip_code}  = req.query;
+    DELETE_USER_QUERY = 'DELETE has_record, season_records FROM school JOIN football_program ON school.name = football_program.school_name JOIN has_record on has_record.team_name = football_program.team_name JOIN season_records on season_records.season_id = has_record.season_id WHERE school.zip_code = ';
+    DELETE_USER_QUERY = DELETE_USER_QUERY.concat(zip_code)
+    db.query(DELETE_USER_QUERY, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.send(err);
+      } else {
+        console.log(res.json);
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
+  app.get("/deleteTeamPlayers", (req, res) => {
+    console.log('delete players')
+    const {zip_code}  = req.query;
+    DELETE_USER_QUERY = 'DELETE players, belongs_to FROM school JOIN football_program ON school.name = football_program.school_name JOIN belongs_to on belongs_to.team_name = football_program.team_name JOIN players on players.player_id = belongs_to.player_id WHERE school.zip_code =  ';
+    DELETE_USER_QUERY = DELETE_USER_QUERY.concat(zip_code)
+    db.query(DELETE_USER_QUERY, (err, results) => {
+      if (err) {
+        console.log(err);
+        return res.send(err);
+      } else {
+        console.log(res.json);
+        return res.json({
+          data: results
+        });
+      }
+    });
+  });
+
+  app.get("/deleteTeamCoach", (req, res) => {
+    console.log('delete coach')
+    const {zip_code}  = req.query;
+    DELETE_USER_QUERY = 'DELETE coached_by, coach FROM school JOIN football_program ON school.name = football_program.school_name JOIN coached_by on coached_by.team_name = football_program.team_name JOIN coach on coached_by.coach_id = coach.coach_id  WHERE school.zip_code = ';
     DELETE_USER_QUERY = DELETE_USER_QUERY.concat(zip_code)
     db.query(DELETE_USER_QUERY, (err, results) => {
       if (err) {
