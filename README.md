@@ -1,49 +1,16 @@
 ### Setup this project
 
 > - `git clone` this repo into your local directory
-> - `cd` into backend directory and run - `npm install`
-> - `cd` into front directory and run - `npm install`
+> - `cd` into new_backend directory and run - `npm install`
+> - `cd` into frontend directory and run - `npm install`
 >
-> The backend is powered by an ExpressJS framework and runs on port 5000.
+> The backend is powered by an ExpressJS framework and runs on port 4000.
 > The frontend is powered by React and runs on port 3000.
-
-### Environment Variables
-
-> For the backend modules to properly function, a few environment variables have to be set:
->
-> - `mm_jwtPrivateKey`
-> - `mysqluser`
-> - `mysqlpass`
->
-> `mm_jwtPrivateKey` will be the private key for [Json Web Tokens](https://jwt.io/) to be generated. We will be using JWT Tokens as part of the request respose cycle by authenticating and authorizing users.
->
-> `mysqluser` and `mysqlpass` are the credentials for the username and password for the MySQL Community Server.
->  Make sure to name database in mysql "cs160"
->
-> The way to set environment variables differ between platforms and interface.  
-> **_Only the terminal running the backend needs to set its env_var._**
->
-> ```
-> // Windows CMD
-> > set mm_jwtPrivateKey="value"
-> > set mysqluser="username"
-> > set mysqlpass="password"
->
-> // Windows Powershell
-> > $env:mm_jwtPrivateKey="value"
-> > $env:mysqluser="username"
-> > $env:mysqlpass="password"
->
-> // Mac/Linux Bash Shell
-> > export mm_jwtPrivateKey="value"
-> > export mysqluser="username"
-> > export mysqlpass="password"
-> ```
 
 ### Running the Project
 
 > - Open 2 terminals for each of the applications
-> - Run the backend with command - `node app`
+> - Run the new_backend with command - `npx nodemon`
 > - Run the frontend with command - `npm start`
 >
 > If successful, the 2 terminals should display the following:
@@ -61,13 +28,14 @@
 >
 > ```
 > // Backend
-> > node app
+> > npx nodemon
 >
-> CFist listening on port 5000
-> Executing (default): SELECT 1+1 AS result
-> database connected
-> All models synced to tables
-> ```
+> [nodemon] 2.0.2
+> [nodemon] to restart at any time, enter `rs`
+> [nodemon] watching dir(s): *.*
+> [nodemon] watching extensions: js,mjs,json
+> [nodemon] starting `node index.js`
+> Server started on port 4000
 >
 > Using a web browser, go to <localhost:3000> and start playing around with our app!
 >

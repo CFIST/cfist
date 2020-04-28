@@ -1,5 +1,0 @@
-{
-    "jwtPrivateKey": "mm_jwtPrivateKey",
-    "mysqluser":"mysqluser",
-    "mysqlpass":"mysqlpass"
-}
