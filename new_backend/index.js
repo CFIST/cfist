@@ -362,6 +362,33 @@ var db = mysql.createConnection({
       });
     });
 
+    app.get("/deleteSeason", (req, res) => {
+      const {season_id}  = req.query;
+      var DELETE_USER_QUERY = `DELETE FROM season_records WHERE season_id = ${season_id}`;
+      db.query(DELETE_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
+
+    app.get("/deleteHasRecord", (req, res) => {
+      const {season_id}  = req.query;
+      var DELETE_USER_QUERY = `DELETE FROM has_record WHERE season_id = ${season_id} `;
+      db.query(DELETE_USER_QUERY, (err, results) => {
+        if (err) {
+          return res.send(err);
+        } else {
+          return res.json({
+            data: results
+          });
+        }
+      });
+    });
 
     app.get("/addHasRecord", (req, res) => {
       const {season_id, team_name, record_year,conference}  = req.query;

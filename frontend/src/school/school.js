@@ -147,7 +147,11 @@ class School extends Component {
         </div>);
     }
 
-    renderSeasons = (record_year,final_CFP_rank,total_wins,total_losses,conference_losses,conference_wins,champions)=>{
+    renderSeasons = (record_year,final_CFP_rank,total_wins,total_losses,conference_losses,conference_wins,champions,season_id)=>{
+      var deleteSeason = "";
+      if(localStorage.getItem("loginToken") != null){
+        deleteSeason = <button className="btn btn-danger"  color="primary" onClick={() => this.deleteSeason(season_id)}>Delete Season</button>
+      }
       return (
           <tr>
             <th scope="row"> {record_year}</th>
@@ -156,8 +160,9 @@ class School extends Component {
             <td>{total_losses}</td>
             <td>{conference_wins}</td>
             <td>{conference_losses}</td>
-            <td>{champions}</td>
-          </tr>);
+            <td>{champions} {deleteSeason}</td>
+          </tr>
+          );
     }
   
 
@@ -320,7 +325,7 @@ class School extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {this.state.seasonData.map(p=> this.renderSeasons(p.record_year,p.final_CFP_rank,p.total_wins,p.total_losses,p.conference_losses,p.conference_wins,p.champions))}
+                  {this.state.seasonData.map(p=> this.renderSeasons(p.record_year,p.final_CFP_rank,p.total_wins,p.total_losses,p.conference_losses,p.conference_wins,p.champions,p.season_id))}
                 </tbody>
                 </table>
                 
@@ -366,6 +371,19 @@ class School extends Component {
       .catch(err => console.error(err));
 
       await this.getPlayerData();
+    };
+
+    deleteSeason = async season_id => {
+      console.log(season_id);
+      await fetch(`http://localhost:4000/deleteHasRecord?season_id=${season_id}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await fetch(`http://localhost:4000/deleteSeason?season_id=${season_id}`)
+      .then(res => res.json())
+      .catch(err => console.error(err));
+
+      await this.getSeasonData();
     };
 
   addNewSeason = async _=>{
