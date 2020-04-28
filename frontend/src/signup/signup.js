@@ -11,21 +11,34 @@ class Signup extends Component {
         username: '',
         email: '',
         password: '',
-        admin:1,
+        admin:'',
+        incorrect: false,
         adminCode: "123"
     };
   }
 
-  signUp = _ => {
-      console.log(this.state.username, this.state.email, this.state.password,this.state.admin);
-    fetch(
-      `http://localhost:4000/addUser?username=${this.state.username}&password=${this.state.password}&email=${this.state.email}&administrator=${this.state.admin}`
-    ).catch(err => console.log(err));
-    this.setState({ redirect: true });
+  signUp = async _ => {
+    console.log(this.state.username, this.state.email, this.state.password);
+    if(this.state.admin === this.state.adminCode){
+      await fetch(
+        `http://localhost:4000/addUser?username=${this.state.username}&password=${this.state.password}&email=${this.state.email}`
+      ).catch(err => console.log(err));
+      await this.setState({ redirect: true });
+    }
+    else{
+      await this.setState({incorrect:true})
+      console.log(this.state.incorrect);
+    }
   };
 
-  showAdmin = _ =>{
-      
+  showIncorrect = _ =>{
+    console.log(this.state.incorrect);
+    if(this.state.incorrect){
+      return <div style={{color:"red"}}> Admin Code Incorrect </div>
+    }
+    else{
+      return <div> </div>
+    }
   }
 
   render() {
@@ -50,10 +63,16 @@ class Signup extends Component {
             Password
           </label>
           <input  type="password" id="inputPassword"  className="form-control" onChange={e => this.setState({password: e.target.value })} placeholder="Password" required></input>
+          <label htmlFor="inputPassword" className="sr-only">
+            Admin Code
+          </label>
+          <input  type="password" id="inputPassword"  className="form-control" onChange={e => this.setState({admin: e.target.value })} placeholder="Admin Code" required></input>
           <br/>
+          {this.showIncorrect()}
           <button className="btn btn-lg btn-primary btn-block" onClick={this.signUp}  type="submit" >
             Sign Up
           </button>
+
           <div className="mb-3">
             Already have an account? &nbsp;
             <Link to="/">Sign in</Link>

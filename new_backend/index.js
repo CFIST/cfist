@@ -153,8 +153,8 @@ var db = mysql.createConnection({
 
   app.get("/addUser", (req, res) => {
     console.log("added a user");
-    const {username, password, email, administrator}  = req.query;
-    const INSERT_USER_QUERY = `INSERT INTO users (email,username,password,administrator) VALUES( '${email}','${username}','${password}','${administrator}')`;
+    const {username, password, email}  = req.query;
+    const INSERT_USER_QUERY = `INSERT INTO users (email,username,password) VALUES( '${email}','${username}','${password}')`;
     db.query(INSERT_USER_QUERY, (err, results) => {
       if (err) {
         return res.send(err);
