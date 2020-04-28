@@ -22,7 +22,7 @@ import Signup from "./signup/signup";
     
         log_in_out = _=>{
           if(localStorage.getItem("loginToken") == null){
-            return <a href="/"> <button className="btn btn-primary">Login</button></a>
+            return <a href="/login"> <button className="btn btn-primary">Login</button></a>
           }
           else{
             return <button className="btn btn-primary" onClick={this.destroy}>Logout</button>
@@ -33,14 +33,14 @@ import Signup from "./signup/signup";
         destroy = _=>{
           console.log(localStorage.getItem("loginToken"));
           localStorage.removeItem("loginToken");
-          window.location.pathname = "/home";
+          window.location.pathname = "/";
         }
 
       render() {
         return (
           <Router>
               <MDBNavbar style={{position:"fixed", width:"100%"}} color="stylish-color" expand="md">
-              <MDBNavLink style={{color:"white"}} to='/home'>CFIST</MDBNavLink>
+              <MDBNavLink style={{color:"white"}} to='/'>CFIST</MDBNavLink>
                     <MDBNavbarToggler onClick={this.toggleCollapse} />
                     <MDBCollapse id="navbarCollapse3" isOpen={this.state.isOpen} navbar>
                     <MDBNavbarNav right>
@@ -51,9 +51,9 @@ import Signup from "./signup/signup";
                     </MDBCollapse>
                 </MDBNavbar>
             <Switch >
-              <Route path="/" exact component={Login} />
+              <Route path="/login" exact component={Login} />
               <Route path="/signup" exact component={Signup}/>
-              <Route path="/home" exact component={Home}/>
+              <Route path="/" exact component={Home}/>
               <Route path="/school" exact component={School}/>
             </Switch>
           </Router>

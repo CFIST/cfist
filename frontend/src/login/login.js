@@ -24,7 +24,7 @@ class Login extends Component {
       const { user } = this.state;
       if (this.state.validate) {
         return <Redirect to={{
-          pathname: '/home',
+          pathname: '/',
           state: {email: this.state.email, username: this.state.username, admin: this.state.admin }
         }} />;
       }
