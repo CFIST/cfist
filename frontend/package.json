@@ -8,6 +8,7 @@
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "cra-template": "1.0.1",
+    "crypto-js": "^4.0.0",
     "material-ui": "^0.20.2",
     "material-ui-popup-state": "^1.5.4",
     "mdbreact": "^4.25.6",

@@ -19,7 +19,7 @@ class Signup extends Component {
 
   signUp = async _ => {
     console.log(this.state.username, this.state.email, this.state.password);
-    if(this.state.admin === this.state.adminCode){
+    if(this.state.admin === this.state.adminCode && this.state.username !== '' && this.state.email!== '' && this.state.password !== ''){
       await fetch(
         `http://localhost:4000/addUser?username=${this.state.username}&password=${this.state.password}&email=${this.state.email}`
       ).catch(err => console.log(err));
@@ -75,7 +75,7 @@ class Signup extends Component {
 
           <div className="mb-3">
             Already have an account? &nbsp;
-            <Link to="/">Sign in</Link>
+            <Link to="/login">Sign in</Link>
           </div>
           <p className="mt-5 mb-3 text-muted">&copy; NCAA 2020</p>
         </div>

@@ -1,8 +1,8 @@
 const express = require("express");
 const app = express();
-const cors = require("cors");
-const path = require("path");
+const cors = require("cors"); //mechanism that uses additional HTTP headers to tell browsers to give a web application running at one origin, access to selected resources from a different origin.
 const db = require("./mysql-conn");
+var Crypto = require('crypto-js');
 
 //  TO RUN DO THE FOLLOWING
 
@@ -154,7 +154,8 @@ var db = mysql.createConnection({
   app.get("/addUser", (req, res) => {
     console.log("added a user");
     const {username, password, email}  = req.query;
-    const INSERT_USER_QUERY = `INSERT INTO users (email,username,password) VALUES( '${email}','${username}','${password}')`;
+    pass = Crypto.SHA256(password).toString();
+    const INSERT_USER_QUERY = `INSERT INTO users (email,username,password) VALUES( '${email}','${username}','${pass}')`;
     db.query(INSERT_USER_QUERY, (err, results) => {
       if (err) {
         return res.send(err);

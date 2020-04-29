@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './login.css';
 import { Redirect , Link} from "react-router-dom";
-
+var Crypto = require('crypto-js');
 
 class Login extends Component {
     constructor(props) {
@@ -81,7 +81,8 @@ class Login extends Component {
         
         console.log(this.state.pass);
         console.log(this.state.password);
-        if(this.state.pass === this.state.password && this.state.pass !== "" && this.state.pass !== null && this.state.pass !== undefined){
+        var hashedPass = Crypto.SHA256(this.state.password).toString();
+        if(this.state.pass === hashedPass && this.state.password !== "" && this.state.password !== null && this.state.password !== undefined){
           localStorage.setItem("loginToken", this.state.username);
           this.setState({validate: true});
           window.location.reload(false);
